@@ -1,0 +1,51 @@
+# Copyright (C) 2024 Vincent MAURY <artec.vm@arnac.net>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#
+# Generic
+#
+
+# Module label 'ModuleGeodisName'
+ModuleGeodisName = Geodis
+# Module description 'ModuleGeodisDesc'
+ModuleGeodisDesc = Module permettant la récupération et l'actualisation des informations sur les expéditions Geodis
+
+#
+# Admin page
+#
+GeodisSetup = Paramétrage Geodis
+Settings = Paramètres
+GeodisSetupPage = Paramétrage Geodis
+NewSection=New section
+
+
+#
+# About page
+#
+About = A propos
+GeodisAbout = A propos du module Geodis
+GeodisAboutPage = A propos du module Geodis
+
+#
+# Sample page
+#
+GeodisArea = Home Geodis
+MyPageName = My page name
+
+#
+# Sample widget
+#
+MyWidget = My widget
+MyWidgetDescription = My widget description
