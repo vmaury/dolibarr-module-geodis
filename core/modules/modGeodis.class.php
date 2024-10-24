@@ -66,7 +66,7 @@ class modGeodis extends DolibarrModules
 
 		// DESCRIPTION_FLAG
 		// Module description, used if translation string 'ModuleGeodisDesc' not found (Geodis is name of module).
-		$this->description = "GeodisDescription";
+		$this->description = "Module de synchro des expéditions depuis l'API Geodis";
 		// Used only if file README.md and README-LL.md not found.
 		$this->descriptionlong = "GeodisDescription";
 
@@ -314,7 +314,7 @@ class modGeodis extends DolibarrModules
 		$this->menu = array();
 		$r = 0;
 		// Add here entries to declare new menus
-		/* BEGIN MODULEBUILDER TOPMENU */
+		/* BEGIN MODULEBUILDER TOPMENU *
 		$this->menu[$r++] = array(
 			'fk_menu'=>'', // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
 			'type'=>'top', // This is a Top menu entry
@@ -462,7 +462,7 @@ class modGeodis extends DolibarrModules
 	 */
 	public function init($options = '')
 	{
-		global $conf, $langs;
+		global $conf, $langs, $db;
 
 		//$result = $this->_load_tables('/install/mysql/', 'geodis');
 		$result = $this->_load_tables('/geodis/sql/');
@@ -479,13 +479,19 @@ class modGeodis extends DolibarrModules
 		//$result3=$extrafields->addExtraField('geodis_myattr3', "New Attr 3 label", 'varchar', 1, 10, 'bank_account', 0, 0, '', '', 1, '', -1, 0, '', '', 'geodis@geodis', 'isModEnabled("geodis")');
 		//$result4=$extrafields->addExtraField('geodis_myattr4', "New Attr 4 label", 'select',  1,  3, 'thirdparty',   0, 1, '', array('options'=>array('code1'=>'Val1','code2'=>'Val2','code3'=>'Val3')), 1,'', -1, 0, '', '', 'geodis@geodis', 'isModEnabled("geodis")');
 		//$result5=$extrafields->addExtraField('geodis_myattr5', "New Attr 5 label", 'text',    1, 10, 'user',         0, 0, '', '', 1, '', -1, 0, '', '', 'geodis@geodis', 'isModEnabled("geodis")');
-		$result_0 = $extrafields->addExtraField('dateexped', 'Date expédition', 'date', 10, 1, 'expedition', 0, 0, '', '', 0);
-		$result_1 = $extrafields->addExtraField('notracking', 'Url suivi exped.', 'varchar', 20, 100, 'expedition', 0, 0, '', '', 0);
-		$result_2 = $extrafields->addExtraField('statutexped', 'Statut expédition', 'varchar', 30, 100, 'expedition', 0, 0, '', '', 0);
-		$result_3 = $extrafields->addExtraField('detailsexped', 'Détails expédition', 'text', 30, 2000, 'expedition', 0, 0, '', '', 0);
+		$result_0 = $extrafields->addExtraField('dateexped', 'Date expéd. Geodis', 'date', 10, 1, 'expedition', 0, 0, '', '', 0);
+		//$result_1 = $extrafields->addExtraField('notracking', 'Url suivi exped.', 'varchar', 20, 100, 'expedition', 0, 0, '', '', 0); // maintenant on utilise le tracking natif uniquement
+		$result_2 = $extrafields->addExtraField('statutexped', 'Statut expéd. Geodis', 'varchar', 30, 100, 'expedition', 0, 0, '', '', 0);
+		$result_3 = $extrafields->addExtraField('detailsexped', 'Détails expéd. Geodis', 'text', 30, 2000, 'expedition', 0, 0, '', '', 0);
 		
-		
-
+		$resdg = $db->query("select * from ".MAIN_DB_PREFIX."c_shipment_mode where code='GEODIS'");
+		if ($resdg && $db->num_rows($resdg) == 0 ) {
+			//die('exist pas');
+			$db->query("INSERT INTO ".MAIN_DB_PREFIX."c_shipment_mode (code,libelle,description,tracking,active) VALUES ('GEODIS', 'GEODIS', NULL, 'https://edesti.com/{TRACKID}', 1)");
+		} else {
+			//die("present");
+			$db->query("UPDATE ".MAIN_DB_PREFIX."c_shipment_mode set tracking='https://edesti.com/{TRACKID}', active=1 where code='GEODIS'");
+		}
 		// Permissions
 		$this->remove($options);
 

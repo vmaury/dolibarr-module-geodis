@@ -16,7 +16,7 @@ class TgCronJob {
 	 * @var string
 	 */
 	public $output = '';
-
+	public $geodis_shipping_method_id;
 	
 	function updtExpedFromGeodis() {
 		global $conf, $db, $user;
@@ -25,6 +25,13 @@ class TgCronJob {
 		$dstart = date('Y-m-d', time() - (3600 * 24 * getDolGlobalInt('GEODIS_NBJ_DATE_SCAN', 15)));
 		$dend = date('Y-m-d');
 		$tbListGeodis = callGeodisZoomApi($dstart, $dend);
+		if (empty($conf->cache['geodis_shipping_method_id'])) {
+			//echo "select rowid from ".MAIN_DB_PREFIX."c_shipment_mode where code='GEODIS'";
+			$resdg = $db->query("select rowid from ".MAIN_DB_PREFIX."c_shipment_mode where code='GEODIS'");
+			$obdg = $db->fetch_object($resdg);
+			$conf->cache['geodis_shipping_method_id'] = (int)$obdg->rowid;
+			//echo 'geodis_shipping_method_id in cache '.$conf->cache['geodis_shipping_method_id'];
+		}
 		if (is_array($tbListGeodis) && empty($tbListGeodis['error'])) {
 			 //print_r($tbListGeodis); die();
 /* Array (
@@ -183,17 +190,27 @@ function testRefExped($refexp) {
  * @return string
  */
 function updateInfosTranspExped(Expedition $Exped, $geoExp) {
+	global $conf;
 	$ret = '';
+	$updt = false;
 	$ExpedOr = clone $Exped;
 	$Exped->array_options['options_statutexped'] = $geoExp['libelleLongEtat'];
-	if (!empty($geoExp['noSuivi'])) {
-		$Exped->array_options['options_notracking'] = '<a href="'.$geoExp['urlSuiviDestinataire'].'" target="_blank">'.$geoExp['noSuivi'].'</a>';
+	if ($Exped->shipping_method_id != $conf->cache['geodis_shipping_method_id']) {
+		$Exped->shipping_method_id = $conf->cache['geodis_shipping_method_id'];
+		$updt = true;
+	}
+	if ($geoExp['codeSituation'] == 'LIV' && $Exped->statut != $Exped::STATUS_CLOSED) {
+		$Exped->setClosed();
+		$updt = true;
+	}
+	if (!empty($geoExp['noSuivi']) && $Exped->tracking_number != $geoExp['noSuivi']) {
+		$updt = true;
 		$Exped->tracking_number = $geoExp['noSuivi'];
 	}
 	if (!empty($geoExp['dateDepart'])) $Exped->array_options['options_dateexped'] = $geoExp['dateDepart'];
-	$updt = false;
+	
 	$ExpedOr->array_options['options_dateexped'] = $ExpedOr->array_options['options_dateexped']; // pour les tests d'update ci-dessous .. sinon ils sont en timestamp
-	foreach (['statutexped', 'notracking', 'dateexped'] as $kp) {
+	foreach (['statutexped', 'dateexped'] as $kp) {
 		if ($Exped->array_options['options_'.$kp] != $ExpedOr->array_options['options_'.$kp]) {
 			$updt = true;
 			$Exped->updateExtraField($kp);
