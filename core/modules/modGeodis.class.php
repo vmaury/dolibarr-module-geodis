@@ -47,14 +47,14 @@ class modGeodis extends DolibarrModules
 
 		// Id for module (must be unique).
 		// Use here a free id (See in Home -> System information -> Dolibarr for list of used modules id).
-		$this->numero = 500000; // TODO Go on page https://wiki.dolibarr.org/index.php/List_of_modules_id to reserve an id number for your module
+		$this->numero = 274404; // TODO Go on page https://wiki.dolibarr.org/index.php/List_of_modules_id to reserve an id number for your module
 
 		// Key text used to identify module (for permissions, menus, etc...)
 		$this->rights_class = 'geodis';
 
 		// Family can be 'base' (core modules),'crm','financial','hr','projects','products','ecm','technic' (transverse modules),'interface' (link with external tools),'other','...'
 		// It is used to group modules by family in module setup page
-		$this->family = "other";
+		$this->family = "crm";
 
 		// Module position in the family on 2 digits ('01', '10', '20', ...)
 		$this->module_position = '90';
@@ -156,7 +156,7 @@ class modGeodis extends DolibarrModules
 
 		// Prerequisites
 		$this->phpmin = array(7, 1); // Minimum version of PHP required by module
-		$this->need_dolibarr_version = array(19, -3); // Minimum version of Dolibarr required by module
+		$this->need_dolibarr_version = array(18, 0); // Minimum version of Dolibarr required by module
 		$this->need_javascript_ajax = 0;
 
 		// Messages at activation
@@ -265,7 +265,7 @@ class modGeodis extends DolibarrModules
 		/* BEGIN MODULEBUILDER CRON */
 		$this->cronjobs = array(
 			  0 => array(
-			      'label' => 'Mal Expéditions Geodis',
+			      'label' => 'Maj Expéditions Geodis',
 			      'jobtype' => 'method',
 			      'class' => '/geodis/class/tg_cron_job.class.php',
 			      'objectname' => 'TgCronJob',

@@ -137,9 +137,9 @@ class TgCronJob {
 						$refExpOk = $geoExp['reference1'];
 					} elseif (testRefExped($geoExp['reference2'])) {
 						$refExpOk = $geoExp['reference2'];
-					} elseif ($geoExp['noSuivi'] == '1GFES5ERQKLH') { // !!!!! BOUCHON TEST
-						$refExpOk = 'SH2404-4271';
-					}
+					} /* elseif ($geoExp['noSuivi'] == '1GQZ2NE8SU2A') { // !!!!! BOUCHON pour TEST
+						$refExpOk = 'SH2410-4070';
+					} */
 					if ($refExpOk) {
 						// parfois des ref d'exped complémentaires sont rajoutées dans la ref 2
 						if ($refExpOk == $geoExp['reference1'] && strstr($geoExp['reference2'], '-')) {
@@ -220,9 +220,9 @@ function updateInfosTranspExped(Expedition $Exped, $geoExp) {
 		$Exped->array_options['options_detailsexped'] = setDetailExp($geoExp);
 		$Exped->updateExtraField('detailsexped');
 		$Exped->update($user);
-		$ret .= "$refExp mise à jour\n";
+		$ret .= $Exped->ref." mise à jour\n";
 	} else {
-		$ret .= "$refExp inchangée\n";
+		$ret .= $Exped->ref." inchangée\n";
 	}
 	return $ret;
 }

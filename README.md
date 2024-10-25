@@ -1,16 +1,44 @@
 # Module GEODIS pour [DOLIBARR ERP & CRM](https://www.dolibarr.org)
 
-## Fonctionnement
+## Paramétrage
 
 Ce module permet la récupération et l'actualisation à intervalles réguliers des informations concernant les expéditions
 effectuées via Geodis (Url de tracking, date de livraison, détails sur l'expédition)
 
-Il suffit lors de la création de l'expédition chez Geodis (via leur portail https://espace-client.geodis.com) de mettre en référence l
-de saisir dans Référence #1 ou Référence #2 la ref de l'expédition type SHyymm-xxxx
+Il faut faire activer par votre service client Geodis l'API Zoom dans votre espace
 
-Ensuite, à condition que les tâches planifiées soient correctement appelées 
-(voir Outils d'adminstration->travaux planifiés)
-l'appel au service Geodis s'effectuera automatiquement toutes les heures
+![Screenshot espace client geodis](img/Capture_ecran_API_Geodis.png)
+
+Les seuls paramétrages dans le setup de ce module à saisir sont l'identifiant API et la clé API Zoom Client
+
+Ensuite, à condition que les tâches planifiées soient activées et correctement appelées 
+(voir Outils d'adminstration->travaux planifiés et docs de ce module)
+l'appel au service Geodis Zoom s'effectuera automatiquement toutes les heures
+
+A noter que ce module a été testé sur les versions Dolibarr suivantes : 21, 18 et 16
+
+## Utilisation
+
+Il suffit lors de la création de l'expédition chez Geodis (via leur portail https://espace-client.geodis.com) de mettre en référence l
+de saisir dans Référence #1 et/ou Référence #2 la(les) ref(s) des l'expédition(s) concernée(s) type SHyymm-xxxx
+
+Il est possible de saisir 2 refs d'exped dans Référence #1 et Référence #2
+
+Mais aussi de saisir plusieurs refs d'expéd. Dolibarr dans les Ref Geodis sous la forme SHyymm-xxxx-yyyy-zzzz etc
+dans ce cas les expéditions SHyymm-xxxx, SHyymm-yyyy, et SHyymm-zzzz seront mises à jour
+
+Le module via les tâches planifiées ira toutes les heures 
+- mettre à jour le transporteur si besoin
+- récupérer le lien de suivi, l'état de l'expédition et les détails, ce dans les champs additionnels 
+"extrafields" **Date expéd. Geodis**, **Statut expéd. Geodis**, **Détails expéd. Geodis**
+
+Si l'expédition passe à "livrée" chez Geodis, le statut de l'expédition Dolibarr passe à "traitée"
+
+A noter que le module Geodis lors de son installation 
+- crée ou met à jour la méthode d'expédition Geodis
+- crée les champs additionnels 
+"extrafields" **Date expéd. Geodis**, **Statut expéd. Geodis**, **Détails expéd. Geodis** dans les expéditions
+
 <!--
 ![Screenshot geodis](img/screenshot_geodis.png?raw=true "Geodis"){imgmd}
 -->
@@ -19,85 +47,4 @@ D'autres modules sont disponibles sur [Dolistore.com](https://www.dolistore.com)
 
 ## Translations
 
-Translations can be completed manually by editing files in the module directories under `langs`.
-
-<!--
-This module contains also a sample configuration for Transifex, under the hidden directory [.tx](.tx), so it is possible to manage translation using this service.
-
-For more information, see the [translator's documentation](https://wiki.dolibarr.org/index.php/Translator_documentation).
-
-There is a [Transifex project](https://transifex.com/projects/p/dolibarr-module-template) for this module.
--->
-
-
-## Installation
-
-Prerequisites: You must have Dolibarr ERP & CRM software installed. You can download it from [Dolistore.org](https://www.dolibarr.org).
-You can also get a ready-to-use instance in the cloud from https://saas.dolibarr.org
-
-
-### From the ZIP file and GUI interface
-
-If the module is a ready-to-deploy zip file, so with a name `module_xxx-version.zip` (e.g., when downloading it from a marketplace like [Dolistore](https://www.dolistore.com)),
-go to menu `Home> Setup> Modules> Deploy external module` and upload the zip file.
-
-Note: If this screen tells you that there is no "custom" directory, check that your setup is correct:
-
-<!--
-
-- In your Dolibarr installation directory, edit the `htdocs/conf/conf.php` file and check that following lines are not commented:
-
-    ```php
-    //$dolibarr_main_url_root_alt ...
-    //$dolibarr_main_document_root_alt ...
-    ```
-
-- Uncomment them if necessary (delete the leading `//`) and assign the proper value according to your Dolibarr installation
-
-    For example :
-
-    - UNIX:
-        ```php
-        $dolibarr_main_url_root_alt = '/custom';
-        $dolibarr_main_document_root_alt = '/var/www/Dolibarr/htdocs/custom';
-        ```
-
-    - Windows:
-        ```php
-        $dolibarr_main_url_root_alt = '/custom';
-        $dolibarr_main_document_root_alt = 'C:/My Web Sites/Dolibarr/htdocs/custom';
-        ```
--->
-
-<!--
-
-### From a GIT repository
-
-Clone the repository in `$dolibarr_main_document_root_alt/geodis`
-
-```shell
-cd ....../custom
-git clone git@github.com:gitlogin/geodis.git geodis
-```
-
--->
-
-### Final steps
-
-Using your browser:
-
-  - Log into Dolibarr as a super-administrator
-  - Go to "Setup"> "Modules"
-  - You should now be able to find and enable the module
-
-
-
-## Licenses
-
-### Main code
-
-GPLv3 or (at your option) any later version. See file COPYING for more information.
-
-### Documentation
-
-All texts and readme's are licensed under [GFDL](https://www.gnu.org/licenses/fdl-1.3.en.html).
+Ce module n'est pour l'instant disponible qu'en Français
