@@ -138,6 +138,10 @@ $item->fieldAttr['placeholder'] = '15';
 $item->helpText = "Nombre de jours précédent la date du jour où on scanne les envois";
 $item->cssClass = 'minwidth100';
 
+$item = $formSetup->newItem('GEODIS_CLOSE_EXPED_AFTER_DELIV')->setAsYesNo();
+$item->nameText = 'Clôturer les expéditions quand livraison effectuée';
+
+
 /*
 // Setup conf for a selection of a thirdparty
 $item = $formSetup->newItem('GEODIS_MYPARAM4');

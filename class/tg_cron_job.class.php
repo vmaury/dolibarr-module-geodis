@@ -137,9 +137,9 @@ class TgCronJob {
 						$refExpOk = $geoExp['reference1'];
 					} elseif (testRefExped($geoExp['reference2'])) {
 						$refExpOk = $geoExp['reference2'];
-					} /* elseif ($geoExp['noSuivi'] == '1GQZ2NE8SU2A') { // !!!!! BOUCHON pour TEST
+					} elseif ($geoExp['noSuivi'] == '1GQZ2NE8SU2A') { // !!!!! BOUCHON pour TEST
 						$refExpOk = 'SH2410-4070';
-					} */
+					} 
 					if ($refExpOk) {
 						// parfois des ref d'exped complémentaires sont rajoutées dans la ref 2
 						if ($refExpOk == $geoExp['reference1'] && strstr($geoExp['reference2'], '-')) {
@@ -199,9 +199,11 @@ function updateInfosTranspExped(Expedition $Exped, $geoExp) {
 		$Exped->shipping_method_id = $conf->cache['geodis_shipping_method_id'];
 		$updt = true;
 	}
-	if ($geoExp['codeSituation'] == 'LIV' && $Exped->statut != $Exped::STATUS_CLOSED) {
-		$Exped->setClosed();
-		$updt = true;
+	if (getDolGlobalInt('GEODIS_CLOSE_EXPED_AFTER_DELIV')) {
+		if ($geoExp['codeSituation'] == 'LIV' && $Exped->statut != $Exped::STATUS_CLOSED) {
+			$Exped->setClosed();
+			$updt = true;
+		}
 	}
 	if (!empty($geoExp['noSuivi']) && $Exped->tracking_number != $geoExp['noSuivi']) {
 		$updt = true;

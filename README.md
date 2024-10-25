@@ -9,7 +9,7 @@ Il faut faire activer par votre service client Geodis l'API Zoom dans votre espa
 
 ![Screenshot espace client geodis](img/Capture_ecran_API_Geodis.png)
 
-Les seuls paramétrages dans le setup de ce module à saisir sont l'identifiant API et la clé API Zoom Client
+Les seuls paramétrages indispensables dans le setup de ce module à saisir sont l'identifiant API et la clé API Zoom Client
 
 Ensuite, à condition que les tâches planifiées soient activées et correctement appelées 
 (voir Outils d'adminstration->travaux planifiés et docs de ce module)
@@ -32,7 +32,7 @@ Le module via les tâches planifiées ira toutes les heures
 - récupérer le lien de suivi, l'état de l'expédition et les détails, ce dans les champs additionnels 
 "extrafields" **Date expéd. Geodis**, **Statut expéd. Geodis**, **Détails expéd. Geodis**
 
-Si l'expédition passe à "livrée" chez Geodis, le statut de l'expédition Dolibarr passe à "traitée"
+Si le paramètre "Clôturer les expéditions quand livraison effectuée" est activé dans le setup, quand l'expédition passe à "livrée" chez Geodis, le statut de l'expédition Dolibarr passera à "traitée"
 
 A noter que le module Geodis lors de son installation 
 - crée ou met à jour la méthode d'expédition Geodis
